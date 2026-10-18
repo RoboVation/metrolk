@@ -17,8 +17,12 @@ export type Direction = {
   routeId: string;
   headsign: Localized;
   stopIds: string[];
-  /** Sample average speed. Not a measured running time. */
+  /** Used only when a stop has no published offset. */
   speedKmh: number;
+  /** Minutes after the terminal departure when the bus is due at each stop. */
+  offsetsMin?: number[];
+  /** Clock minutes from midnight, Asia/Colombo, for each published terminal departure. */
+  departuresMin?: number[];
   headwayMin: number;
   /** Minutes from midnight, Asia/Colombo. Last terminal departure, inclusive. */
   firstMin: number;

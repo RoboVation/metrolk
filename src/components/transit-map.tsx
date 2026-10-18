@@ -101,6 +101,7 @@ export function TransitMap({
       try {
         const ml = await import("maplibre-gl");
         if (dead || !holder.current) return;
+        ml.setWorkerUrl(new URL(`${import.meta.env.BASE_URL}maplibre-gl-worker.mjs`, window.location.href).href);
         map = new ml.Map({
           container: holder.current,
           style: STYLE[theme],

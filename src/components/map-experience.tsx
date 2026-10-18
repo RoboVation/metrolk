@@ -479,7 +479,7 @@ export function MapExperience({ fromKey, toKey }: { fromKey?: string; toKey?: st
                 <button type="button" className="grid gap-1 text-left" onClick={() => setSelectedId(journey.id)}>
                   <div className="flex items-baseline justify-between gap-3">
                     <span className="font-display text-2xl tabular-nums">{Math.max(1, Math.round(journey.durationMin))} {t("min")}</span>
-                    <span className="text-sm tabular-nums">{journey.fare.modelId === "no-fare" ? t("walk") : formatLkr(journey.fare.amountLkr, lang)}</span>
+                    <span className="text-sm tabular-nums">{journey.fare.modelId === "no-fare" ? t("walk") : journey.fare.modelId === "metrobus-unlisted" ? t("fareUnlisted") : formatLkr(journey.fare.amountLkr, lang)}</span>
                   </div>
                   <p className="text-xs text-muted">
                     {journey.fare.modelId === "no-fare" ? t("walk") : `${t("fareSample")} · ${t("lowConfidence")} · ${t("perBoarding")}`}

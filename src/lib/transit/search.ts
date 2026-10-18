@@ -64,13 +64,13 @@ export const FALLBACK_ALERT = {
   severity: "info" as const,
   routeId: null as string | null,
   title: {
-    en: "Sample network only",
-    si: "නියැදි ජාලය පමණි",
-    ta: "மாதிரி வலையமைப்பு மட்டும்",
+    en: "Metro timetable",
+    si: "මෙට්‍රෝ කාලසටහන",
+    ta: "மெட்ரோ அட்டவணை",
   },
   body: {
-    en: "This notice is seeded demonstration copy. It is not a live operator disruption. Routes, times, and vehicle positions in Gaman are sample data.",
-    si: "මෙය නියැදි දැනුම්දීමකි. සජීවී මෙහෙයුම් බාධාවක් නොවේ. ගමන් මාර්ග, වේලාවන් සහ වාහන ස්ථාන නියැදි දත්තයි.",
-    ta: "இது ஒரு மாதிரி அறிவிப்பு. நேரடி இயக்குநர் இடையூறு அல்ல. வழிகள், நேரங்கள், வண்டி நிலைகள் மாதிரி தரவு.",
+    en: "Times and fares follow the published Metro Bus timetable on metrobus.lk for CM01 and CM02. Positions are scheduled, not live GPS. Other routes on that site have no published timetable yet.",
+    si: "CM01 සහ CM02 වේලාවන් සහ ගාස්තු metrobus.lk කාලසටහනයි. ස්ථාන කාලසටහන අනුවයි, සජීවී GPS නොවේ.",
+    ta: "CM01 மற்றும் CM02 நேரங்களும் கட்டணங்களும் metrobus.lk அட்டவணை. நிலைகள் அட்டவணைப்படி, நேரடி GPS அல்ல.",
   },
 };

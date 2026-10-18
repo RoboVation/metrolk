@@ -1,6 +1,7 @@
-import { estimateFare, NO_FARE, sumFares, type FareEstimate } from "./fares.ts";
+import { NO_FARE, sumFares, type FareEstimate } from "./fares.ts";
 import { walkMeters } from "./geo.ts";
 import { alongM, DIRECTIONS, routeById, stopById, STOPS } from "./network.ts";
+import { priceRide } from "./price.ts";
 import { nextBoard } from "./schedule.ts";
 import type { Direction, Localized, Stop } from "./types.ts";
 
@@ -40,8 +41,8 @@ export type RideLeg = {
   arriveAt: number;
   fare: FareEstimate;
   geometry: [number, number][];
-  dataSource: "sample";
-  freshness: "sample-headway";
+  dataSource: "metrobus";
+  freshness: "published-timetable";
 };
 
 export type Leg = WalkLeg | RideLeg;
@@ -57,7 +58,7 @@ export type Journey = {
   transfers: number;
   fare: FareEstimate;
   reliability: "unknown";
-  freshness: "sample-dataset";
+  freshness: "published-timetable";
 };
 
 export type PlanInput = {
@@ -135,8 +136,12 @@ function rideLeg(direction: Direction, board: Stop, alight: Stop, readyAt: numbe
   const route = routeById(direction.routeId);
   if (!boarded || !route) return null;
   const distanceM = alongM(direction, from, to);
-  const rideMin = (distanceM / (direction.speedKmh * 1000)) * 60;
+  const rideMin = direction.offsetsMin
+    ? (direction.offsetsMin[to] ?? 0) - (direction.offsetsMin[from] ?? 0)
+    : (distanceM / (direction.speedKmh * 1000)) * 60;
   const departAt = boarded.boardAt;
+  const fare = priceRide(direction.routeId, board.id, alight.id);
+  if (!fare) return null;
   const geometry = direction.stopIds.slice(from, to + 1).flatMap((id) => {
     const stop = stopById(id);
     return stop ? [[stop.lng, stop.lat] as [number, number]] : [];
@@ -162,10 +167,10 @@ function rideLeg(direction: Direction, board: Stop, alight: Stop, readyAt: numbe
     rideMin,
     departAt,
     arriveAt: departAt + rideMin * 60_000,
-    fare: estimateFare(distanceM / 1000, route.mode),
+    fare,
     geometry,
-    dataSource: "sample",
-    freshness: "sample-headway",
+    dataSource: "metrobus",
+    freshness: "published-timetable",
   };
 }
 
@@ -189,7 +194,7 @@ function finalize(legs: Leg[], leaveAt: number): Journey | null {
     transfers: Math.max(0, rides.length - 1),
     fare: rides.length > 0 ? sumFares(rides.map((ride) => ride.fare)) : NO_FARE,
     reliability: "unknown",
-    freshness: "sample-dataset",
+    freshness: "published-timetable",
   };
 }
 
